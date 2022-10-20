@@ -7,21 +7,95 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="css/custom.css">
-<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="css/custom.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript">
+		var lastID = 0;
+		function submitFunction() {
+			console.log("이게실행이되고있긴 한가");
+			var chatName = $('#chatName').val();
+			var chatContent = $('#chatContent').val();
+			$.ajax({
+				type:"POST",
+				url: "./chatSubvlet",
+				data: {
+					chatName : chatName,
+					chatContent : chatContent
+				},
+				success: function(result) {
+					alert('비밀번호가 맞습니다.');
+				}
+			});
+		}
+		
+		function chatListFunction(){
+			$.ajax({
+				type:"POST",
+				url: "./chatListServlet",
+				data: {},
+				success: function(hello) {
+					console.log("여기까지오긴하나????222222");
+					var parsed = JSON.parse(hello);
+					console.log(parsed);
+					var result = parsed.result;
+					for(var i = 0; i < result.length; i++) {
+						addChat(result[i][1].value, result[i][2].value, result[i][3].value);
+						lastID = result[i][0].value;
+					}
+				}
+			});
+		}
+		
+		function chatLast() {
+			console.log("무한반복 실행중");
+			$.ajax({
+				type:"POST",
+				url: "./chatListServlet",
+				data: {
+					lastID : lastID
+				},
+				success: function(hello) {
+					console.log("여기까지오긴하나????222222");
+					var parsed = JSON.parse(hello);
+					console.log(parsed);
+					var result = parsed.result;
+					for(var i = 0; i < result.length; i++) {
+						addChat(result[i][1].value, result[i][2].value, result[i][3].value);
+						lastID = result[i][0].value;
+					}
+				}
+			});
+		}
+		
+		function addChat(chatName, chatContent, chatTime) {
+			$('#chatList').append('<div class="row">' + 
+						'<div class="col-lg-12">' + 
+						'<div class="media">' +
+						'<div class="media-body">' +
+						'<h4 class="media-heading">' +
+						chatName +
+						'<span class="small pull-right">' +
+						chatTime +
+						'</span>' +
+						'</h4>' +
+						'<p>' +
+						chatContent +
+						'</p>' +
+						'</div>' +
+						'</div>' +
+						'</div>' +
+						'</div>' +
+						'<hr>');
+		}
+	</script>
 </head>
-<script type="text/javascript">
-	function submitChat(){
-		alert('자바스크립트 button를 클릭하셨습니다.');
-	}
-</script>
 <body>
 	<div class="chat_wrap">
 	    <div class="header">
 	        CHAT
 	    </div>
-	    <div class="chat">
+	    <div id="chatList" class="chat">
 	        <ul>
 	        	<li class="left">
 			            <% 
@@ -39,28 +113,20 @@
 				</li>
 	        </ul>
 	    </div>
-	    <form method="post" action="submitChat.jsp">
-	    	<input type="text" name="chatName" value="blue">
-		    <div class="input-div">
-		        <textarea name="chatContent" placeholder="Press Enter for send message."></textarea>
-		    </div>
-		 	
-		    <!-- format -->
-		 	
-		    <div class="chat format">
-		        <ul>
-		            <li>
-		                <div class="sender">
-		                    <span></span>
-		                </div>
-		                <div class="message">
-		                    <span></span>
-		                </div>
-		            </li>
-		        </ul>
-		    </div>
-		    <input type="submit" onclick="submitChat()">자바스크립트 button</submit>
-	    </from>
+    	<input type="text" id="chatName" value="blue">
+	    <div class="input-div">
+	        <textarea id="chatContent" placeholder="Press Enter for send message."></textarea>
+	    </div>
+	    <button type="button" onclick="submitFunction();">자바스크립트 button</button>
+	    <button type="button" onclick="chatListFunction();">추가</button>
 	</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		setInterval(function() {
+			chatLast();
+		}, 500)
+	})
+</script>
+</script>
 </body>
 </html>
