@@ -48,7 +48,7 @@
 		}
 		
 		function chatLast() {
-			console.log("무한반복 실행중");
+			console.log(lastID);
 			$.ajax({
 				type:"POST",
 				url: "./chatListServlet",
@@ -56,7 +56,7 @@
 					lastID : lastID
 				},
 				success: function(hello) {
-					console.log("여기까지오긴하나????222222");
+					console.log(hello);
 					var parsed = JSON.parse(hello);
 					console.log(parsed);
 					var result = parsed.result;

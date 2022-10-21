@@ -82,7 +82,7 @@ public class chatDAO {
 		String SQL = "INSERT INTO chat values(?, ?, ?, now())";
 		try {
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, 10);
+			pstmt.setInt(1, 13);
 			pstmt.setString(2, chatName);
 			pstmt.setString(3, chatContent);
 			return pstmt.executeUpdate();
