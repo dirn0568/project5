@@ -119,6 +119,7 @@
 	    </div>
 	    <button type="button" onclick="submitFunction();">자바스크립트 button</button>
 	    <button type="button" onclick="chatListFunction();">추가</button>
+	    <button type="button" onclick="chatListFunction();">추가</button>
 	</div>
 <script type="text/javascript">
 	$(document).ready(function() {
